@@ -37,9 +37,20 @@ operación solicitada
 def printMenu():
     print("Bienvenido")
     print("1- Cargar información en el catálogo")
-    print("2- ")
+    print("2- Consultar videos destacados por país, categoria y cantidad")
+    print("3- Consultar el video más famoso por país")
+    print("4- Consultar el video más famoso por categoria")
+    print("5- Consultar videos con más likes por país y etiqueta")
+    print("0- Salir")
 
-catalog = None
+def initCatalog():
+    return controller.initCatalog()
+
+def loadData(catalog, ids):
+    return controller.loadData(catalog, ids)
+
+def initId():
+    return controller.initId()
 
 """
 Menu principal
@@ -48,13 +59,43 @@ while True:
     printMenu()
     inputs = input('Seleccione una opción para continuar\n')
     if int(inputs[0]) == 1:
-        t1=t.process_time_ns()
         print("Cargando información de los archivos ....")
-        t2=t.process_time_ns()
-        print("Tiempo:{:.10f} nano seconds".format(t2-t1))
+        catalog=initCatalog()
+        ids=initId()
+
+        loadData(catalog,ids)
+
+        print('Registros de videos cargados: ' + str(lt.size(catalog['title'])))
+        print('Primer video: ' + str(controller.getfd(catalog)))
+        print('Categorias: ' + str(ids))
+
 
     elif int(inputs[0]) == 2:
-        pass
+        category=str(input("Escriba la categoria que le interesa"))
+        country=str(input("Ecriba el nombre del país"))
+        n=int(input("Ingrese el número de videos que desea conocer"))
+
+        ans=controller.getbestbyccn(catalog,category, country, n)
+        print(ans)
+
+    elif int(inputs[0]) == 3:
+        country=str(input("Ecriba el nombre del país"))
+
+        ans=controller.getbestbycountry(catalog, country)
+        print(ans)
+
+    elif int(inputs[0]) == 4:
+        category=str(input("Ecriba la categoria que le interesa"))
+
+        ans=controller.getbestbycategory(catalog,category)
+        print(ans)
+    
+    elif int(inputs[0]) == 5:
+        tag=str(input("Escriba la etiqueta(tag) de su interés"))
+        n=int(input("Ingrese el numero de videos que desea conocer"))
+        
+        ans=controller.getbytag(catalog, tag, n)
+        print(ans)
 
     else:
         sys.exit(0)
