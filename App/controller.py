@@ -35,15 +35,11 @@ def initCatalog():
     catalog=model.newCatalog()
     return catalog
 
-def initId():
-    id=model.newId()
-    return id
-
 # Funciones para la carga de datos
 
-def loadData(catalog,ids):
+def loadData(catalog):
     loadVids(catalog)
-    loadIds(ids)
+    loadIds(catalog)
 
 def loadVids(catalog):
     vfile = cf.data_dir + 'videos-small.csv'
@@ -51,22 +47,14 @@ def loadVids(catalog):
     for video in input_file:
         model.addVideo(catalog, video)
 
-def loadIds(ids):
+def loadIds(catalog):
     ifile = cf.data_dir + 'category-id.csv'
     input_file =csv.reader(open(ifile, encoding='utf-8'))
 
     for row in input_file:
-        model.addId(ids,row)
+        model.addId(catalog,row)
     
     
 # Funciones de ordenamiento
 
-def getfd(catalog):
-    data={'title','channel_title','trending_date','country','views','likes','dislikes'}
-    a=[]
-
-    for i in data:
-        var=lt.firstElement(catalog[i])
-        a.append(var)
-    return a
 # Funciones de consulta sobre el catálogo

@@ -46,11 +46,8 @@ def printMenu():
 def initCatalog():
     return controller.initCatalog()
 
-def loadData(catalog, ids):
-    return controller.loadData(catalog, ids)
-
-def initId():
-    return controller.initId()
+def loadData(catalog):
+    return controller.loadData(catalog)
 
 """
 Menu principal
@@ -61,13 +58,11 @@ while True:
     if int(inputs[0]) == 1:
         print("Cargando información de los archivos ....")
         catalog=initCatalog()
-        ids=initId()
+        loadData(catalog)
 
-        loadData(catalog,ids)
-
-        print('Registros de videos cargados: ' + str(lt.size(catalog['title'])))
-        print('Primer video: ' + str(controller.getfd(catalog)))
-        print('Categorias: ' + str(ids))
+        print('Registros de videos cargados: ' + str(lt.size(catalog['videos'])))
+        print('Primer video: ' + str(lt.firstElement(catalog['videos'])))
+        print('Categorias: ' + str(catalog['ids']))
 
 
     elif int(inputs[0]) == 2:
