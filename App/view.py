@@ -54,7 +54,7 @@ Menu principal
 """
 while True:
     printMenu()
-    inputs = input('Seleccione una opción para continuar\n')
+    inputs = input('Seleccione una opción para continuar:\n')
     if int(inputs[0]) == 1:
         print("Cargando información de los archivos ....")
         catalog=initCatalog()
@@ -66,12 +66,13 @@ while True:
 
 
     elif int(inputs[0]) == 2:
-        category=str(input("Escriba la categoria que le interesa"))
-        country=str(input("Ecriba el nombre del país"))
-        n=int(input("Ingrese el número de videos que desea conocer"))
+        category=str(input("Escriba la categoria que le interesa: "))
+        country=str(input("Escriba el nombre del país: "))
+        n=int(input("Ingrese el número de videos que desea conocer: "))
 
-        ans=controller.getbestbyccn(catalog,category, country, n)
-        print(ans)
+        ans=controller.getbestbyccn(catalog,category, country)
+        controller.print_inf2(ans[0], n)
+        print('El tiempo fue de {0} milisegundos'.format(ans[1]))
 
     elif int(inputs[0]) == 3:
         country=str(input("Ecriba el nombre del país"))
@@ -90,7 +91,12 @@ while True:
         n=int(input("Ingrese el numero de videos que desea conocer"))
         
         ans=controller.getbytag(catalog, tag, n)
-        print(ans)
+        print(ans[0], ans[1])
+
+
+    elif int(inputs[0]) ==6:
+        print('Ejecutando la opción super secreta')
+        controller.veryveryverylazy(catalog)
 
     else:
         sys.exit(0)
