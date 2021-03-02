@@ -41,6 +41,7 @@ def printMenu():
     print("3- Consultar el video más famoso por país")
     print("4- Consultar el video más famoso por categoria")
     print("5- Consultar videos con más likes por país y etiqueta")
+    print("6- Lab5sorts")
     print("0- Salir")
 
 def initCatalog():
@@ -70,21 +71,23 @@ while True:
         country=str(input("Escriba el nombre del país: "))
         n=int(input("Ingrese el número de videos que desea conocer: "))
 
-        ans=controller.getbestbyccn(catalog,category, country)
-        controller.print_inf2(ans[0], n)
+        ans=controller.reque1(catalog,category, country)
+        controller.print_reque1(ans[0], n)
         print('El tiempo fue de {0} milisegundos'.format(ans[1]))
 
     elif int(inputs[0]) == 3:
-        country=str(input("Ecriba el nombre del país"))
+        country=str(input("Escriba el nombre del país: "))
 
-        ans=controller.getbestbycountry(catalog, country)
-        print(ans)
+        ans=controller.reque2(catalog,country)
+        print(ans[0])
+        print('El tiempo fue de {0} milisegundos'.format(ans[1]))
 
     elif int(inputs[0]) == 4:
-        category=str(input("Ecriba la categoria que le interesa"))
+        category=str(input("Escriba la categoria que le interesa: "))
 
-        ans=controller.getbestbycategory(catalog,category)
-        print(ans)
+        ans=controller.reque3(catalog,category)
+        print(ans[0])
+        print('El tiempo fue de {0} milisegundos'.format(ans[1]))
     
     elif int(inputs[0]) == 5:
         tag=str(input("Escriba la etiqueta(tag) de su interés"))
@@ -94,9 +97,10 @@ while True:
         print(ans[0], ans[1])
 
 
-    elif int(inputs[0]) ==6:
+    elif int(inputs[0]) == 6:
+        k=int(input('Escriba 1 para merge, 2 para quick, 3 para shell, \n 4 para selection, 5 para insertion: '))
         print('Ejecutando la opción super secreta')
-        controller.veryveryverylazy(catalog)
+        controller.veryveryverylazy(catalog, k)
 
     else:
         sys.exit(0)

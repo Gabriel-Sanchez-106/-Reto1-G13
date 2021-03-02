@@ -54,7 +54,7 @@ def loadIds(catalog):
     for row in input_file:
         model.addId(catalog,row)
     
-def print_inf2(sorted_cv, n)->None:
+def print_reque1(sorted_cv, n)->None:
     p=1
 
     while p<=n:
@@ -62,27 +62,31 @@ def print_inf2(sorted_cv, n)->None:
         print(a['trending_date'], a['title'], a['channel_title'],a['publish_time'], a['views'], a['likes'], a['dislikes'])
 
         p+=1
-    
+
+
+
 # Funciones de ordenamiento
-def insertsortbv(catalog,country,id)->list:
-    return model.insertsortbv(catalog, country, id)
 
-def selectionsortbv(cv, country, id)->list:
-    return model.selectionsortbv(cv, country, id)
-
-def shellsortbv(cv, country, id)->list:
-    return model.shellsortbv(cv, country, id)
-
-
-def getbestbyccn(catalog,category,country):
+def reque1(catalog,category,country):
     id=model.nametid(catalog,category)
-    ans=insertsortbv(catalog, country, id)
+    ans=model.reque1(catalog, country, id)
+
+    return ans
+
+def reque2(catalog,country):
+    ans=model.reque2(catalog,country)
+
+    return ans
+
+def reque3(catalog,name_id):
+    id=model.nametid(name_id)
+    ans=model.reque3(catalog,id)
 
     return ans
 
 # Funciones de consulta sobre el catálogo
 
-def veryveryverylazy(catalog)->None:
+def veryveryverylazy(catalog, k)->None:
     main=catalog['videos'].copy()
 
     c1=   lt.subList(main, 1, 1000)
@@ -92,11 +96,9 @@ def veryveryverylazy(catalog)->None:
     c16=  lt.subList(main, 1, 16000)
     c32=  lt.subList(main, 1, 32000)
     c64=  lt.subList(main, 1, 64000)
-    c128= lt.subList(main, 1, 128000)
-    c256= lt.subList(main, 1, 256000)
-
-    minis=[c1, c2, c4, c8, c16, c32, c64, c128, c256]
+    
+    minis=[c1, c2, c4, c8, c16, c32, c64]
 
     for mini in minis:
-        ma=model.dataim(mini)
+        ma=model.dataim(mini,k)
         print (ma)
