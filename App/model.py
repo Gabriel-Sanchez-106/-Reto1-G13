@@ -28,11 +28,8 @@
 import config as cf
 import time as t
 from DISClib.ADT import list as lt
-from DISClib.Algorithms.Sorting import shellsort as sa
-from DISClib.Algorithms.Sorting import insertionsort as ir
-from DISClib.Algorithms.Sorting import selectionsort as ss
+from DISClib.Algorithms.Sorting import mergesort as sa
 from DISClib.Algorithms.Sorting import quicksort as qs
-from DISClib.Algorithms.Sorting import mergesort as ms
 
 
 assert cf
@@ -48,10 +45,13 @@ los mismos.
 def newCatalog()->dict:
     catalog= {
         'videos': None,
-        'ids':    None, }
+        'tags'  : None,
+        'ids'   : None, }
     
     catalog['videos']=lt.newList('LINKED_LIST')
+    catalog['tags']={}
     catalog['ids']={}
+
 
     return catalog
 ## ids to list
@@ -63,8 +63,11 @@ def addVideo(catalog, video)->None:
      sub={}
 
      for i in data:
-         value=video[i].lower()
+         value=video[i]
          sub[i]=value
+
+         if i=='tags':
+             datagsthing(value, catalog, video['title'])
         
      lt.addLast(cv, sub)
 
@@ -78,8 +81,22 @@ def addId(catalog, row)->None:
     
     ci[i]=n
 
+def datagsthing(value,catalog, name):
+    name=name.strip().lower()
+    tags=catalog['tags']
+    main=value.split('|')
+
+    for i in main:
+
+        if not i in tags: 
+            tags[i]=lt.newList()
+            lt.addLast(tags[i], name)
+        
+        else:
+            lt.addLast(tags[i], name)
+
 # Funciones para creacion de datos
-def cutcv(cv, country, id)->list:
+def f_rq1(cv, country, id)->list:
     card=lt.size(cv)
     p=1
     c=country.lower()
@@ -89,9 +106,12 @@ def cutcv(cv, country, id)->list:
         e=lt.getElement(cv, p)
         ec=str(e['country'])
         ei=int(e['category_id'])
+        a=dict(title=e['title'], channel_title=e['channel_title'],publish_time=e['publish_time'],
+                    views=e['views'], likes=e['likes'], dislikes=e['dislikes'], trending_date=e['trending_date'])
 
-        if ec==c and ei==id:
-            lt.addLast(ans, e)
+
+        if ec.lower()==c and ei==id:
+            lt.addLast(ans, a)
 
         p+=1
     return ans
@@ -106,7 +126,7 @@ def f_rq2(cv, country):
         ec=str(e['country'])
         a=dict(title=e['title'], channel_title=e['channel_title'], country=e['country'])
 
-        if ec==c:
+        if ec.lower()==c:
             lt.addLast(ans,a)
         
         p+=1
@@ -119,10 +139,29 @@ def f_rq3(cv,id):
     while p<=lt.size(cv):
         e=lt.getElement(cv,p)
         ei=int(e['category_id'])
-        a=a=dict(title=e['title'], channel_title=e['channel_title'], country=e['category_id'])
+        a=a=dict(title=e['title'], channel_title=e['channel_title'], category_id=e['category_id'])
 
         if ei==id:
             lt.addLast(ans,a)
+        
+        p+=1
+    return ans
+
+def f_rq4(cv, titles,country):
+    p=1
+    ans=lt.newList()
+    c=country.lower()
+
+    while p<=lt.size(cv):
+        e=lt.getElement(cv,p)
+        et=str(e['title'])
+        ec=str(e['country'])
+        et=et.strip().lower()
+        a=dict(title=e['title'], channel_title=e['channel_title'],publish_time=e['publish_time'],
+                    views=e['views'], likes=e['likes'], dislikes=e['dislikes'], tags=e['tags'])
+
+        if lt.isPresent(titles, et)>0 and ec.lower()==c:
+            lt.addLast(ans, a)
         
         p+=1
     return ans
@@ -195,6 +234,8 @@ def cmpVideosByViews(video1, video2)->bool:
 def cmpVideosByTrend(video1, video2)->bool:
     return (float(video1['trending_days']) > float(video2['trending_days']))
 
+def cmpVideosByLikes(video1, video2)->bool:
+    return (float(video1['likes']) > float(video2['likes']))
 
 # Funciones de ordenamiento
 def dataim(mini,k)->float:
@@ -208,7 +249,7 @@ def dataim(mini,k)->float:
 
 def reque1(catalog, country, id)->list:
     cv=catalog['videos']
-    dans=cutcv(cv,country,id)
+    dans=f_rq1(cv,country,id)
 
     t1=t.process_time()
     ans=sa.sort(dans, cmpVideosByViews)
@@ -223,7 +264,6 @@ def reque2(catalog,country):
     dans=f_rq2(cv,country)
     mini=counting_days(dans)
     dans=acotador(dans,mini)
-    print(dans)
 
     t1=t.process_time()
     ans=sa.sort(dans, cmpVideosByTrend)
@@ -237,13 +277,28 @@ def reque2(catalog,country):
 def reque3(catalog,id):
     cv=catalog['videos']
     dans=f_rq3(cv,id)
-    dans=counting_days(dans)
+    mini=counting_days(dans)
+    dans=acotador(dans,mini)
 
     t1=t.process_time()
     ans=sa.sort(dans, cmpVideosByTrend)
     t2=t.process_time()
     ans=lt.firstElement(ans)
     tans=(t2-t1)*100
+    
+    a=(ans, tans)
+    return a
 
+def reque4(catalog, tag, country):
+    cv=catalog['videos']
+    tags=catalog['tags']
+    titles=tags[tag]
+    dans=f_rq4(cv, titles, country)
+
+    t1=t.process_time()
+    ans=sa.sort(dans, cmpVideosByLikes)
+    t2=t.process_time()
+    tans=(t2-t1)*100
+    
     a=(ans, tans)
     return a

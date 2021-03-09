@@ -72,7 +72,7 @@ while True:
         n=int(input("Ingrese el número de videos que desea conocer: "))
 
         ans=controller.reque1(catalog,category, country)
-        controller.print_reque1(ans[0], n)
+        controller.print_reque(ans[0], n)
         print('El tiempo fue de {0} milisegundos'.format(ans[1]))
 
     elif int(inputs[0]) == 3:
@@ -90,11 +90,13 @@ while True:
         print('El tiempo fue de {0} milisegundos'.format(ans[1]))
     
     elif int(inputs[0]) == 5:
-        tag=str(input("Escriba la etiqueta(tag) de su interés"))
-        n=int(input("Ingrese el numero de videos que desea conocer"))
+        tag=str(input("Escriba la etiqueta(tag) de su interés: "))
+        country=str(input("Escriba el nombre del país: "))
+        n=int(input("Ingrese el numero de videos que desea conocer: "))
         
-        ans=controller.getbytag(catalog, tag, n)
-        print(ans[0], ans[1])
+        ans=controller.reque4(catalog, tag, country)
+        controller.print_reque(ans[0], n)
+        print('El tiempo fue de {0} milisegundos'.format(ans[1]))
 
 
     elif int(inputs[0]) == 6:

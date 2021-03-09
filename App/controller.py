@@ -20,6 +20,7 @@
  * along withthis program.  If not, see <http://www.gnu.org/licenses/>.
  """
 
+from DISClib.Algorithms.Sorting.shellsort import sort
 import config as cf
 import model
 import csv
@@ -54,12 +55,15 @@ def loadIds(catalog):
     for row in input_file:
         model.addId(catalog,row)
     
-def print_reque1(sorted_cv, n)->None:
+def print_reque(sorted_cv, n)->None:
     p=1
 
-    while p<=n:
+    if lt.size(sorted_cv)<n: k=lt.size(sorted_cv)
+    else: k=n
+
+    while p<=k:
         a=lt.getElement(sorted_cv, p)
-        print(a['trending_date'], a['title'], a['channel_title'],a['publish_time'], a['views'], a['likes'], a['dislikes'])
+        print(a)
 
         p+=1
 
@@ -79,8 +83,16 @@ def reque2(catalog,country):
     return ans
 
 def reque3(catalog,name_id):
-    id=model.nametid(name_id)
+    id=model.nametid(catalog,name_id)
     ans=model.reque3(catalog,id)
+
+    return ans
+
+def reque4(catalog, tag, country):
+    c="\""
+    tag=c+tag+c
+    print(tag)
+    ans=model.reque4(catalog,tag,country)
 
     return ans
 
